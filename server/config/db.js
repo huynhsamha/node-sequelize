@@ -1,9 +1,9 @@
-export default {
+module.exports = {
   development: {
     dialect: 'postgres',
     host: process.env.DEV_DB_HOST || 'localhost',
     port: process.env.DEV_DB_PORT || '5432',
-    database: process.env.DEV_DB_NAME || 'todos-dev',
+    database: process.env.DEV_DB_NAME || 'node_sequelize',
     username: process.env.DEV_DB_USER || 'localuser',
     password: process.env.DEV_DB_PASSWD || '98054'
   },
