@@ -88,6 +88,7 @@ module.exports = {
       'no-mixed-operators': 0,
       'object-property-newline': 0,
       'no-nested-ternary': 0,
+      'import/no-dynamic-require': 0,
       // import plugin
       'import/no-mutable-exports': 0,
       'import/extensions': 0,

@@ -11,6 +11,16 @@ import cors from 'cors';
 import ejs from 'ejs';
 import engine from 'ejs-locals';
 
+import sequelize from './server/models';
+import routes from './server/routes';
+
+/**
+ * Config database postgres
+ */
+sequelize.sync()
+  .then(() => console.log('Sync Database'))
+  .catch(err => console.log(err));
+
 /**
  * Configure App Express
  */
@@ -32,9 +42,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 /**
  * Configure Routes
  */
-import index from './server/routes';
-
-app.use('/', index);
+app.use('/', routes);
 
 app.get('*', (req, res) => res.status(200).send({
   message: 'Welcome to the beginning of nothingness.'
