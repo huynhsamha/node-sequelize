@@ -1,7 +1,7 @@
-import todos from './todos.js';
-import todoItems from './todoitems.js';
+import employees from './employees';
+import departments from './departments';
 
 module.exports = {
-  todos,
-  todoItems
+  employees,
+  departments
 };

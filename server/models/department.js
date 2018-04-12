@@ -3,19 +3,28 @@
 import Sequelize from 'sequelize';
 import sequelize from '../config/sequelize';
 
-const Todo = sequelize.define('Todo', {
+import Employee from './employee';
+
+const Department = sequelize.define('Department', {
   id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true
   },
-  title: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  start_date: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  manager_id: {
+    type: Sequelize.INTEGER
   }
 }, {
 });
 
 
-export default Todo;
+export default Department;
