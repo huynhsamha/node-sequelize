@@ -1,4 +1,4 @@
-import { Employee, Department } from '../models';
+import { Employee, Department, Project, WorksOn } from '../models';
 
 function create(req, res) {
   const {
@@ -17,7 +17,7 @@ function getListOffsetLimit(req, res) {
   return Employee.findAll({
     include: [{
       model: Department,
-      as: 'Department'
+      as: 'department'
     }],
     offset,
     limit
@@ -28,7 +28,15 @@ function getListOffsetLimit(req, res) {
 
 function findById(req, res) {
   const { id } = req.params;
-  return Employee.findById(id)
+  return Employee.findById(id, {
+    include: [{
+      model: Department,
+      as: 'department'
+    }, {
+      model: Employee,
+      as: 'supervisor'
+    }]
+  })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: 'Employee not found' });
@@ -53,6 +61,37 @@ async function updateById(req, res) {
   }
 }
 
+async function deleteById(req, res) {
+  const { id } = req.params;
+  try {
+    const employee = await Employee.findById(id);
+    if (!employee) {
+      return res.status(404).send({ message: 'Employee not found' });
+    }
+    await employee.destroy();
+    return res.status(204).send({ message: 'Employee deleted successfully' });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+}
+
+async function getProjects(req, res) {
+  const { id } = req.params;
+  try {
+    const employee = await Employee.findById(id);
+    if (!employee) {
+      return res.status(404).send({ message: 'Employee not found' });
+    }
+    const projects = await employee.getProjects({
+      attributes: ['id', 'name']
+    });
+    res.status(200).send(projects);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+}
+
 export default {
-  create, getListOffsetLimit, findById, updateById
+  create, getListOffsetLimit, findById, updateById, deleteById,
+  getProjects
 };

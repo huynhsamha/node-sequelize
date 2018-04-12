@@ -13,7 +13,7 @@ function getListOffsetLimit(req, res) {
     .findAll({
       include: [{
         model: Employee,
-        as: 'Manager'
+        as: 'manager'
       }],
       offset,
       limit
@@ -24,7 +24,12 @@ function getListOffsetLimit(req, res) {
 
 function findById(req, res) {
   const { id } = req.params;
-  return Department.findById(id)
+  return Department.findById(id, {
+    include: [{
+      model: Employee,
+      as: 'manager'
+    }]
+  })
     .then((data) => {
       if (!data) {
         return res.status(404).send({ message: 'Department not found' });
@@ -40,7 +45,7 @@ async function updateById(req, res) {
   try {
     let department = await Department.findById(id);
     if (!department) {
-      return res.status(404).send({ message: 'Employee not found' });
+      return res.status(404).send({ message: 'Department not found' });
     }
     department = await department.update(new_values);
     return res.status(200).send(department);
@@ -49,6 +54,35 @@ async function updateById(req, res) {
   }
 }
 
+async function deleteById(req, res) {
+  const { id } = req.params;
+  try {
+    const department = await Department.findById(id);
+    if (!department) {
+      return res.status(404).send({ message: 'Department not found' });
+    }
+    await department.destroy();
+    return res.status(204).send({ message: 'Department deleted successfully' });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+}
+
+async function getEmployees(req, res) {
+  const { id } = req.params;
+  try {
+    const department = await Department.findById(id);
+    if (!department) {
+      return res.status(404).send({ message: 'Department not found' });
+    }
+    const employees = await department.getEmployees();
+    return res.status(200).send(employees);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+}
+
 export default {
-  create, getListOffsetLimit, findById, updateById
+  create, getListOffsetLimit, findById, updateById, deleteById,
+  getEmployees
 };

@@ -1,6 +1,9 @@
 import express from 'express';
-import employees from './employees';
-import departments from './departments';
+import employee from './employee';
+import department from './department';
+import project from './project';
+import worksOn from './works_on';
+import { ApiNotSupport } from '../controllers';
 
 const router = express.Router();
 
@@ -9,24 +12,11 @@ router.get('/', (req, res, next) => {
   res.render('index');
 });
 
-router.use('/api/v1/employees', employees);
-router.use('/api/v1/departments', departments);
-
-// router.get('/api/todos', todosController.list);
-// router.post('/api/todos', todosController.create);
-// router.get('/api/todos/:todoId', todosController.retrieve);
-// router.put('/api/todos/:todoId', todosController.update);
-// router.delete('/api/todos/:todoId', todosController.destroy);
-
-// router.post('/api/todos/:todoId/items', todoItemsController.create);
-// router.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
-// router.delete('/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy);
-
-// For any other request method on todo items, we're going to return "Method Not Allowed"
-// router.all('/api/todos/:todoId/items', (req, res) =>
-//   res.status(405).send({
-//     message: 'Method Not Allowed'
-//   }));
+router.use('/api/v1/employees', employee);
+router.use('/api/v1/departments', department);
+router.use('/api/v1/projects', project);
+router.use('/api/v1/works_ons/', worksOn);
+router.use('/api/v1/*', ApiNotSupport);
 
 
 export default router;
